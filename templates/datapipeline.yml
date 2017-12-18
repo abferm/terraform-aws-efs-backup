@@ -172,6 +172,8 @@ Resources:
             - Key: allowedValues
               StringValue: t2.micro
             - Key: allowedValues
+              StringValue: t2.medium
+            - Key: allowedValues
               StringValue: m3.medium
             - Key: allowedValues
               StringValue: m3.large
