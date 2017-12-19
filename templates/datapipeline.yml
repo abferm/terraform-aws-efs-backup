@@ -3,6 +3,8 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: DataPipeline EFS Backup DataPipeline Template
 
 Parameters:
+  myBackupName:
+    Type: String
   myS3BackupsBucket:
     Type: String
   mySecurityGroupId:
@@ -136,7 +138,7 @@ Resources:
             - Key: topicArn
               StringValue: "#{myTopicArn}"
             - Key: subject
-              StringValue: "[Info] EFS Backup Succeeded"
+              StringValue: "[Info] EFS Backup Succeeded (#{myBackupName})"
             - Key: message
               StringValue: |
                 scheduledStartTime: "#{node.@scheduledStartTime}"
@@ -151,7 +153,7 @@ Resources:
             - Key: topicArn
               StringValue: "#{myTopicArn}"
             - Key: subject
-              StringValue: "[Alert] EFS Backup Failed"
+              StringValue: "[Alert] EFS Backup Failed (#{myBackupName})"
             - Key: message
               StringValue: |
                 scheduledStartTime: "#{node.@scheduledStartTime}"
@@ -239,6 +241,14 @@ Resources:
               StringValue: s3://efs-backups
             - Key: description
               StringValue: S3 Backup Bucket
+        - Id: myBackupName
+          Attributes:
+            - Key: type
+              StringValue: String
+            - Key: default
+              StringValue: EFS Backup
+            - Key: description
+              StringValue: Backup name
         - Id: myImageId
           Attributes:
             - Key: type
@@ -310,6 +320,8 @@ Resources:
           StringValue: !Ref myRegion
         - Id: myS3BackupsBucket
           StringValue: !Ref myS3BackupsBucket
+        - Id: myBackupName
+          StringValue: !Ref myBackupName
         - Id: myImageId
           StringValue: !Ref myImageId
         - Id: myS3LogBucket

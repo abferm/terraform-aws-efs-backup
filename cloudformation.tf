@@ -34,6 +34,7 @@ resource "aws_cloudformation_stack" "datapipeline" {
   template_body = "${file("${path.module}/templates/datapipeline.yml")}"
 
   parameters {
+    myBackupName               = "${module.datapipeline_label.id}"
     myInstanceType             = "${var.datapipeline_config["instance_type"]}"
     mySubnetId                 = "${data.aws_efs_mount_target.default.subnet_id}"
     mySecurityGroupId          = "${aws_security_group.datapipeline.id}"
