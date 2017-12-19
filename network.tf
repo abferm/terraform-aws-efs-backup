@@ -4,13 +4,12 @@ data "aws_route_table" "default" {
 }
 
 resource "null_resource" "has_internet" {
-  count = "${contains(list(data.aws_route_table.default.routes.*.cidr_block), "0.0.0.0/0") == true ? 0 : 1}"
 
   triggers {
     always = "${uuid()}"
   }
 
   provisioner "local-exec" {
-    command = "echo 'ERROR: datapipeline instances can only run if they have internet access "${list(data.aws_route_table.default.routes.*.cidr_block)}"'; false;"
+    command = "echo '\"${jsonencode(list(data.aws_route_table.default.routes))}\"'| grep '\"cidr_block\":\"0.0.0.0/0\"'"
   }
 }
