@@ -1,6 +1,6 @@
 resource "aws_security_group" "datapipeline" {
   tags        = "${module.label.tags}"
-  vpc_id      = "${data.aws_vpc.default.id}"
+  vpc_id      = "${var.vpc_id}"
   description = "${module.label.id}"
 
   ingress {

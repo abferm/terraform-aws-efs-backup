@@ -1,9 +1,15 @@
-# Get object aws_vpc by vpc_id
-data "aws_vpc" "default" {
-  id = "${var.vpc_id}"
+# Assert that the selected subnet has internet access
+data "aws_route_table" "default" {
+  subnet_id = "${data.aws_efs_mount_target.default.subnet_id}"
 }
 
-# Get all subnets from the VPC
-data "aws_subnet_ids" "default" {
-  vpc_id = "${data.aws_vpc.default.id}"
+resource "null_resource" "has_internet" {
+  count = "${contains(list(data.aws_route_table.default.routes.*.cidr_block), "0.0.0.0/0") == true ? 0 : 1}"
+  triggers {
+    always = "${uuid()}"
+  }
+
+  provisioner "local-exec" {
+    command = "echo 'ERROR: datapipeline instances can only run if they have internet access'; false;"
+  }
 }

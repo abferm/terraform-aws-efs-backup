@@ -51,5 +51,7 @@ resource "aws_cloudformation_stack" "datapipeline" {
     myExecutionTimeout         = "${var.datapipeline_config["timeout"]}"
   }
 
+  depends_on = ["null_resource.has_internet"]
+
   tags = "${module.datapipeline_label.tags}"
 }
