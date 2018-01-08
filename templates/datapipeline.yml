@@ -126,25 +126,8 @@ Resources:
               StringValue: "#{myRegion}"
             - Key: scriptArgument
               StringValue: "#{myS3BackupsBucket}"
-            - Key: onSuccess
-              RefValue: SuccessNotify
             - Key: onFail
               RefValue: FailureNotify
-        - Id: SuccessNotify
-          Name: SuccessNotify
-          Fields:
-            - Key: type
-              StringValue: SnsAlarm
-            - Key: topicArn
-              StringValue: "#{myTopicArn}"
-            - Key: subject
-              StringValue: "[Info] EFS Backup Succeeded (#{myBackupName})"
-            - Key: message
-              StringValue: |
-                scheduledStartTime: "#{node.@scheduledStartTime}"
-                actualStartTime: "#{node.@actualStartTime}"
-                actualEndTime: "#{node.@actualEndTime}"
-                hostname: "#{node.hostname}"
         - Id: FailureNotify
           Name: FailureNotify
           Fields:
